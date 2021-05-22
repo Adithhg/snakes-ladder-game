@@ -1,7 +1,8 @@
-package com.game;
+package com.game.runner;
 
-import com.game.models.Ladder;
-import com.game.models.Snake;
+import com.game.models.*;
+import com.game.utils.DiceFactory;
+import com.game.utils.ValidateInputValuesForSnakesAndLadders;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -11,10 +12,42 @@ import java.util.Scanner;
 public class GameRunner {
 
 
-    private void validateAndGetCommandLineInput() {
+    private SnakesLadderBoard validateInputAndGetSnakeBoard() {
+
+        Scanner scanner;
+        System.out.println("Please enter the Player's details");
+        Player player;
+        while (true) {
+            try {
+                System.out.print("Player's Id :");
+                scanner = new Scanner(System.in);
+                String playerId = scanner.next().trim();
+                System.out.print("Player's Name :");
+                String playerName = scanner.next().trim();
+                player = new Player(playerId, playerName);
+                break;
+            } catch (InputMismatchException ne) {
+                System.out.println("Please enter the String values");
+            }
+        }
+        System.out.println("Please select the Dice for the game");
+        Dice dice;
+        while (true) {
+            try {
+                System.out.print("Enter 1 for Normal Dice. or 2 for Crooked Dice.");
+                scanner = new Scanner(System.in);
+                int diceId = scanner.nextInt();
+                if (diceId != 1 && diceId != 2) {
+                    continue;
+                }
+                dice = DiceFactory.getDice(diceId);
+                break;
+            } catch (InputMismatchException ne) {
+                System.out.println("Please enter the integer numbers 1 or 2");
+            }
+        }
 
         System.out.println("Please enter the number of snakes in the board");
-        Scanner scanner;
         int numOfSnakes;
         while (true) {
             try {
@@ -37,7 +70,7 @@ public class GameRunner {
                     int head = scanner.nextInt();
                     System.out.print("Tail : ");
                     int tail = scanner.nextInt();
-                    if (!validateSnakeInput(head, tail, snakes)) {
+                    if (!ValidateInputValuesForSnakesAndLadders.validateSnakeInput(head, tail, snakes)) {
                         continue;
                     }
                     snakes.add(new Snake(head, tail));
@@ -47,7 +80,6 @@ public class GameRunner {
                     System.out.println("Please enter the integer number greater than 0");
                 }
             }
-
         }
 
         System.out.println("Please enter the number of ladders in the board");
@@ -61,7 +93,7 @@ public class GameRunner {
                 System.out.println("Please enter the integer number greater than 0");
             }
         }
-        System.out.println("Entered number of snakes : " + numOfLadders);
+        System.out.println("Entered number of ladders : " + numOfLadders);
 
         List<Ladder> ladders = new ArrayList<>();
         int j = 0;
@@ -73,7 +105,7 @@ public class GameRunner {
                     int start = scanner.nextInt();
                     System.out.print("End : ");
                     int end = scanner.nextInt();
-                    if (!validateLadderInput(start, end, ladders)) {
+                    if (!ValidateInputValuesForSnakesAndLadders.validateLadderInput(start, end, ladders, snakes)) {
                         continue;
                     }
                     ladders.add(new Ladder(start, end));
@@ -83,89 +115,29 @@ public class GameRunner {
                     System.out.println("Please enter the integer number greater than 0");
                 }
             }
-
         }
 
-        System.out.println(snakes);
-        System.out.println(ladders);
+        SnakesLadderBoard snakesLadderBoard = new SnakesLadderBoard(player, snakes, ladders, dice);
 
+        if (snakesLadderBoard == null) {
+            System.out.println("Restart the game");
+            System.exit(-1);
+        }
+
+        return snakesLadderBoard;
     }
-
-    private boolean validateLadderInput(int start, int end, List<Ladder> ladders) {
-
-        if (start == end) {
-            System.out.println("Index for start cannot be equals to end, re-enter.");
-            return false;
-        }
-
-        if (start > end) {
-            System.out.println("Index for start cannot be greater than end, re-enter.");
-            return false;
-        }
-
-        if (start >= 100 || start < 0) {
-            System.out.println("Valid Index for start is between 0 to 99, re-enter.");
-            return false;
-        }
-
-        if (end > 100) {
-            System.out.println("Valid Index for end is between 1 to 100, re-enter.");
-            return false;
-        }
-
-        Ladder ladder = new Ladder(start, end);
-        if (ladders.contains(ladder)) {
-            System.out.println("Ladder with the entered values is already present on the board. re-enter.");
-            return false;
-        }
-
-        return true;
-    }
-
-    public boolean validateSnakeInput(int head, int tail, List<Snake> snakesAdded) {
-
-        if (head == tail) {
-            System.out.println("Index for Tail cannot be equals to Head, re-enter.");
-            return false;
-        }
-
-        if (head < tail) {
-            System.out.println("Index for Tail cannot be greater than Head, re-enter.");
-            return false;
-        }
-
-        if (head >= 100) {
-            System.out.println("Index for Head cannot be equal to or greater than 100, re-enter.");
-            return false;
-        }
-
-        if (head <=0) {
-            System.out.println("Index for Head cannot be equal to or lesser than 0, re-enter.");
-            return false;
-        }
-
-        if (tail < 0) {
-            System.out.println("Index for Head cannot be equal to or lesser than 0, re-enter.");
-            return false;
-        }
-
-        Snake newSnake = new Snake(head, tail);
-        if (snakesAdded.contains(newSnake)) {
-            System.out.println("Snake with the entered values is already present on the board. re-enter.");
-            return false;
-        }
-
-        return true;
-    }
-
 
 
     public static void main(String[] args) {
 
         GameRunner gameRunner = new GameRunner();
 
-        gameRunner.validateAndGetCommandLineInput();
-
-
+        SinglePlayerSnakesAndLaddersGameRunner game = new SinglePlayerSnakesAndLaddersGameRunner(gameRunner.validateInputAndGetSnakeBoard());
+        if (game.startGame()) {
+            System.out.println("Game won!!!");
+        }
+        else {
+            System.out.println("Game lost!!!");
+        }
     }
 }

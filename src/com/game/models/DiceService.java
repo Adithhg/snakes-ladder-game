@@ -11,7 +11,7 @@ import java.util.Random;
 public class DiceService implements Dice{
 
     @Override
-    public int roll() {
+    public int diceThrow() {
         return new Random().nextInt(DICE_SIDES) + 1;
     }
 }

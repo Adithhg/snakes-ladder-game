@@ -10,27 +10,27 @@ import java.util.Objects;
  */
 public class Ladder {
 
-    private int startCell;
-    private int endCell;
+    private int bottomCell;
+    private int topCell;
 
-    public Ladder(int startCell, int endCell) {
-        this.startCell = startCell;
-        this.endCell = endCell;
+    public Ladder(int bottomCell, int topCell) {
+        this.bottomCell = bottomCell;
+        this.topCell = topCell;
     }
-    public int getStartCell() {
-        return startCell;
-    }
-
-    public void setStartCell(int startCell) {
-        this.startCell = startCell;
+    public int getBottomCell() {
+        return bottomCell;
     }
 
-    public int getEndCell() {
-        return endCell;
+    public void setBottomCell(int bottomCell) {
+        this.bottomCell = bottomCell;
     }
 
-    public void setEndCell(int endCell) {
-        this.endCell = endCell;
+    public int getTopCell() {
+        return topCell;
+    }
+
+    public void setTopCell(int topCell) {
+        this.topCell = topCell;
     }
 
     @Override
@@ -38,19 +38,19 @@ public class Ladder {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ladder ladder = (Ladder) o;
-        return startCell == ladder.startCell && endCell == ladder.endCell;
+        return bottomCell == ladder.bottomCell && topCell == ladder.topCell;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startCell, endCell);
+        return Objects.hash(bottomCell, topCell);
     }
 
     @Override
     public String toString() {
         return "Ladder{" +
-                "startCell=" + startCell +
-                ", endCell=" + endCell +
+                "startCell=" + bottomCell +
+                ", endCell=" + topCell +
                 '}';
     }
 }

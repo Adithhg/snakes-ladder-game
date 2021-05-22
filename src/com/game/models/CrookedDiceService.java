@@ -17,7 +17,7 @@ public class CrookedDiceService implements Dice {
         Returns the even numbered side every time the player uses CrookedDice.
      */
     @Override
-    public int roll() {
+    public int diceThrow() {
         return POSSIBLE_DICE_ROLLS[new Random().nextInt(POSSIBLE_DICE_ROLLS.length)];
     }
 }

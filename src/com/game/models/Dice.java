@@ -14,5 +14,5 @@ public interface Dice {
     //CONSTANTS
     int DICE_SIDES = 6;
 
-    int roll();
+    int diceThrow();
 }
