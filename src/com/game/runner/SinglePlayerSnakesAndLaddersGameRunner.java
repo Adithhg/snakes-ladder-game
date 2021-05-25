@@ -19,9 +19,9 @@ public class SinglePlayerSnakesAndLaddersGameRunner implements SnakesAndLadderGa
     private static int NUMBER_OF_ROLLS = 10; //only allowed to roll 10 times
     private static int BOARD_SIZE = 100;     //goal
 
-    SnakesLadderBoard snakesLadderBoard;
-    int currentRollCounter = 0;
-    int currentPosition = 0;
+    private SnakesLadderBoard snakesLadderBoard;
+    private int currentRollCounter = 0;
+    private int currentPosition = 0;
 
     public SinglePlayerSnakesAndLaddersGameRunner(SnakesLadderBoard snakesLadderBoard) {
         this.snakesLadderBoard = snakesLadderBoard;
@@ -102,7 +102,31 @@ public class SinglePlayerSnakesAndLaddersGameRunner implements SnakesAndLadderGa
         return false;
     }
 
-    private boolean gameWon() {
+    public boolean gameWon() {
         return currentPosition == BOARD_SIZE;
+    }
+
+    public int getCurrentRollCounter() {
+        return currentRollCounter;
+    }
+
+    public void setCurrentRollCounter(int currentRollCounter) {
+        this.currentRollCounter = currentRollCounter;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
+    }
+
+    public SnakesLadderBoard getSnakesLadderBoard() {
+        return snakesLadderBoard;
+    }
+
+    public void setSnakesLadderBoard(SnakesLadderBoard snakesLadderBoard) {
+        this.snakesLadderBoard = snakesLadderBoard;
     }
 }
